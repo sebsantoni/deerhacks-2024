@@ -12,11 +12,15 @@ import tensorflow as tf
 
 from sklearn.metrics import confusion_matrix, classification_report
 
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
+from PIL import Image
+
 # variables
-filePath # the path of the files to train on
+filePath = './fruit_data/test' # the path of the files to train on
 sample_size = 100 # the number of images to sample from each class
 num_epochs = 100 # the number of epochs for which to train the model
-num_classes = 101 # the number of classes/categories from which to predict
+num_classes = 131 # the number of classes/categories from which to predict
 
 # data frame setup
 
@@ -122,6 +126,7 @@ cm = confusion_matrix(test_images.labels, predictions)
 clr = classification_report(test_images.labels, predictions)
 
 # figures
+
 plt.figure(figsize=(30,30))
 sns.heatmap(cm, annot=True, fmt='g', cmin=0, cmap='Blues', cbar=False)
 plt.xticks(ticks=np.arange(num_classes) + 0.5, labels=test_images.class_indices, rotation=90) # number of classes
@@ -132,10 +137,6 @@ plt.title("Confusion Matrix")
 plt.show()
 print("Classification Report:\n------------------\n", clr)
 
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_predictions
-from PIL import Image
-import numpy as np
 
 def load_and_preprocess_image(image_path):
     img = Image.open(image_path)
@@ -145,15 +146,18 @@ def load_and_preprocess_image(image_path):
     img_array = preprocess_input(img_array)
     return img_array
 
-# Example usage:
+# image prediction function
+def make_prediction(image_path):
+    new_image = load_and_preprocess_image(image_path)
+
+    # Make prediction
+    predictions = model.predict(new_image)
+
+    # Decode predictions to get the class label
+    predicted_class = np.argmax(predictions)
+
+    class_label = list(train_images.class_indices.keys())[predicted_class]
+    return class_label
+
+print(make_prediction(image_path))
 image_path = '/kaggle/input/food41/images/churros/1078896.jpg'
-new_image = load_and_preprocess_image(image_path)
-
-# Make prediction
-predictions = model.predict(new_image)
-
-# Decode predictions to get the class label
-predicted_class = np.argmax(predictions)
-
-class_label = list(train_images.class_indices.keys())[predicted_class]
-print("Predicted Class:", class_label)
