@@ -91,7 +91,7 @@ def ecoScoreCalc(csv_file_path, search_string):
                 carbonValue = 5 - carbonValue
             print("The carbon eco-score a(n)", search_string, "is", carbonValue, "out of 5")
             
-        if(waterValue == -1 or carbonValue == 1):
+        if(waterValue == -1 or carbonValue == -1):
             averageValue = -1
         else:
             averageValue = round((waterValue+carbonValue)/2)
