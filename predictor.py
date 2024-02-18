@@ -1,6 +1,7 @@
 import numpy as np
 import os.path 
-import sys
+import csv
+import statistics
 
 import matplotlib.pyplot as plt 
 import seaborn as sns
@@ -14,8 +15,85 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_
 from PIL import Image
 
 from globals import train_images, test_images, num_classes, testDir
-from parser import ecoScoreCalc
 
+
+def ecoScoreCalc(csv_file_path, search_string):
+    with open(csv_file_path, 'r', newline='') as file:
+        reader = csv.reader(file)
+
+        wasFound = False
+
+        # Assuming the first row contains headers, you can skip it if needed
+        # headers = next(reader, None)
+
+        for row_num, row in enumerate(reader, start=1):
+            if search_string.lower() == row[0].lower():
+                print(f"String '{search_string}' found.")
+                wasFound = True
+                break
+
+        if not (wasFound):
+            print(search_string, "was not found.")
+            return wasFound, -1, -1, -1  # if it was found, water score, carbon score, average score
+
+        # second part - find footprints
+        waterValue = float(row[1])
+        # print("The water footprint of a(n)", search_string, "is:", waterValue, "liters/kg")
+
+        carbonValue = float(row[2])
+        # print("The carbon footprint of a(n)", search_string, "is:", carbonValue, "kg/kg")
+
+        # third part - find how eco friendly it is
+        target_value = waterValue
+
+        # Extract the specified column
+        column_values = [float(row[1]) for row in reader if float(row[1]) != 0]
+
+        if (target_value == 0):
+            print("Water footprint data not available")
+            waterValue = -1
+        else:
+            mean_value = statistics.mean(column_values)
+
+            # Calculate and print the percentage difference for the target value
+            waterValue = round((((waterValue - mean_value) / 1.8109406130140314) + 919) / 300)
+            if (waterValue > 5):
+                waterValue = 5
+            waterValue = 5 - waterValue
+            print("The water eco-score for a(n)", search_string, "is", waterValue, "out of 5")
+
+        file.seek(0)  # Reset the file pointer to the beginning
+        target_value = float(carbonValue)
+
+        if (target_value == 0):
+            print("Carbon data not available")
+            carbonValue = -1
+        else:
+            # Extract the specified column
+            column_values = [float(row[2]) for row in reader if float(row[2]) != 0]
+
+            mean_value = statistics.mean(column_values)
+
+            ## Calculate and print the percentage difference for each value
+            # for index, value in enumerate(column_values, start=1):
+            #    percentage_diff = calculate_carbon_score(value, mean_value, std_dev_value)
+            #    if(percentage_diff > 5):
+            #        percentage_diff = 5
+            #    percentage_diff = 5 - percentage_diff
+            #    print(f"Percentage Difference from Mean = {round(percentage_diff)}")
+
+            # Calculate and print the percentage difference for the target value
+            carbonValue = round((carbonValue - mean_value + 0.47) * 14.652014652)
+            if (carbonValue > 5):
+                carbonValue = 5
+                carbonValue = 5 - carbonValue
+            print("The carbon eco-score for a(n)", search_string, "is", carbonValue, "out of 5")
+
+        if (waterValue == -1 or carbonValue == -1):
+            averageValue = -1
+        else:
+            averageValue = round((waterValue + carbonValue) / 2)
+            print("The overall eco-score for a(n)", search_string, "is", averageValue, "out of 5")
   
 def load_and_preprocess_image(image_path):
     img = Image.open(image_path)
@@ -74,7 +152,7 @@ def is_valid_image(file_path):
             return True
     except Exception as e:
         # If an exception occurs, the file is not a valid image
-        print(f"Invalid image file: {e}")
+        # print(f"Invalid image file: {e}")
         return False
 
 
@@ -99,12 +177,6 @@ if __name__ == '__main__':
         # checking if it is a file
         if is_valid_image(f):
             prediction = make_prediction(f, model, train_images)
-            found, water, carbon, average= ecoScoreCalc(csv_file_path, prediction)
-            if (found is False) or average == -1:
-                print("prediction: ", prediction, " no ecological data available.")
-            else:
-                print("prediction: ", prediction, " water score: ", water, " carbon score: ", carbon, "overall ecological score: ", average)
-
-       
+            ecoScoreCalc(csv_file_path, prediction)
 
     # evaluate_model(model, test_images)
