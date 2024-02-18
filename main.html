@@ -116,7 +116,7 @@
             .then(response => response.text())
             .then(data => {
                 responseData = data;
-                document.getElementById('message-container').innerHTML = data;
+                document.getElementById('message-container').innerHTML = "Detected item: " + data;
                 document.getElementById('overlay').style.backgroundColor = transparent;
                 document.getElementById('overlay').display = flex;
             })
