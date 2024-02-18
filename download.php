@@ -5,14 +5,9 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-$imgs_generated = -1;
 
 // discard the first image, which generates weirdly for some reason
 if (isset($_POST)){
-    $imgs_generated++;
-    if ($imgs_generated == 0){
-        // pass
-    }
 
     // Get the base64-encoded image data from the FormData object
     $encodedImage = $_POST["imageData"];
@@ -40,3 +35,8 @@ if (isset($_POST)){
 
  
 }
+
+    echo("processing images...");
+    $command = escapeshellcmd("python ./identifier.py");
+    exec($command, $output);
+    var_dump($output);
