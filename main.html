@@ -5,29 +5,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Food Scanner</title>
         <link rel="stylesheet" href="style.css" type="text/css" />
+
+        <!-- to use AOS (Animate on Scroll) -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+        <!-- to use Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
     </head>
 <body>
-    <div id="splash-screen">
-        <img id="splash-image" src='placeholder.jpg'>
+    <div id="splash-screen" data-aos="zoom-in" data-aos="400">
+        <img id="splash-image" src='logo.png'>
+        <p class=lexend-words id="splash-slogan">EMPOWER YOUR PLATE</p>
     </div>
 
     <div id="main-content" style="display: none;">
-        <h1>Food Scanner</h1>
-        <button onclick="startScan()">Start Scan</button>
-        <ul id="foodList">
-            <!-- Food items will be added here dynamically -->
-        </ul>
+
+        <div id="view1">
+            <p class=lexend-words id="desc">Scan your food to unveil its environmental impact and receive an eco score.</p>
+            <button class="scan-button" role="button" onclick="startScan()">Start Scan</button>
+        </div>
+
         <div id="camera-container">
             <video id="video" autoplay playsinline></video>
             <div id="overlay">
-                <div id="message-container">
+                <div class=lexend-words id="message-container">
                     <h2>Choose Purpose</h2>
                     <p>Please select the purpose of your scan:</p>
-                    <button onclick="scanForSustainability()">Check Sustainability</button>
-                    <button onclick="addToInventory()">Add to Inventory</button>
+                    <button onclick="scanForSustainability()" class=lexend-words>Check Sustainability</button>
+                    <button onclick="addToInventory()" class=lexend-words>Add to Inventory</button>
                 </div>
             </div>
-            <!-- back button -->
         </div>
     </div>
     <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
@@ -37,7 +46,7 @@
         setTimeout(function() {
             document.getElementById('splash-screen').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
-        }, 1000); 
+        }, 1500); 
         
         async function startScan() {
             const video = document.getElementById('video');
@@ -47,6 +56,8 @@
                 const stream = await navigator.mediaDevices.getUserMedia(constraints);
                 video.srcObject = stream;
                 video.play();
+                document.getElementById('view1').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
                 document.getElementById('overlay').style.display = 'flex';
                 //detectFood(stream);
             } catch (err) {
@@ -54,7 +65,7 @@
             }
         }
 
-        // Function to show overlay
+        // show overlay
         function showOverlay() {
             document.getElementById('overlay').style.display = 'flex';
         }
@@ -64,14 +75,14 @@
             document.getElementById('overlay').style.display = 'none';
         }
 
-        // Function to handle scanning for sustainability
+        // scan food for ecoscore
         function scanForSustainability() {
             // Add your logic for sustainability scanning here
             hideOverlay(); // Hide the overlay after selection
             startCapture();
         }
 
-        // Function to handle adding to inventory
+        // add food to inventory
         function addToInventory() {
             // Add your logic for adding to inventory here
             hideOverlay(); // Hide the overlay after selection
@@ -81,7 +92,7 @@
         function startCapture() {
             captureInterval = setInterval(() => {
                 capturePicture();
-            }, 10000);
+            }, 5000);
         }
 
         function stopCapture() {
@@ -103,9 +114,13 @@
             body: formData 
             })
             .then(response => response.text())
-            .then(data => console.log(data))
+            .then(data => {
+                responseData = data;
+                document.getElementById('message-container').innerText = data;
+                // document.getElementById('overlay').style.backgroundColor = transparent;
+                // document.getElementById('overlay').display = flex;
+            })
             .catch(error => console.error('Error:', error));
-
         }
 
 
@@ -130,6 +145,13 @@
         //         video.style.display = 'none';
         //     }, 5000); // Simulating detection for 5 seconds
         // }
+
     </script>
+
+    <!-- to use AOS (Animate on Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script> 
 </body>
 </html>
