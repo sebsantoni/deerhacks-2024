@@ -14,6 +14,7 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input, decode_
 from PIL import Image
 
 from globals import train_images, test_images, num_classes, testDir
+from parser import ecoScoreCalc
 
   
 def load_and_preprocess_image(image_path):
@@ -79,21 +80,31 @@ def is_valid_image(file_path):
 
 if __name__ == '__main__':
 
-    f = sys.argv[0] # path of image to predict is passed in as an argument
+    # f = sys.argv[0] # path of image to predict is passed in as an argument
 
     model = tf.keras.models.load_model('./model')
 
-    file = open('./user_data/predictions.txt', 'a')
-    file.write(make_prediction(f, model, train_images))
-    file.close()
+#     file = open('./user_data/predictions.txt', 'a')
+#     file.write(make_prediction(f, model, train_images))
+#     file.close()
 
-   if is_valid_image(f):
-        print(make_prediction(f, model, train_images))
+#    if is_valid_image(f):
+#         print(make_prediction(f, model, train_images))
 
 
-    # for filename in os.listdir(testDir):
-    #     f = os.path.join(testDir, filename)
-    #     # checking if it is a file
-    #    
+    csv_file_path =  "./fruit_carbon_and_water_footprint_data.csv"
+    
+    for filename in os.listdir(testDir):
+        f = os.path.join(testDir, filename)
+        # checking if it is a file
+        if is_valid_image(f):
+            prediction = make_prediction(f, model, train_images)
+            found, water, carbon, average= ecoScoreCalc(csv_file_path, prediction)
+            if (found is False) or average == -1:
+                print("prediction: ", prediction, " no ecological data available.")
+            else:
+                print("prediction: ", prediction, " water score: ", water, " carbon score: ", carbon, "overall ecological score: ", average)
+
+       
 
     # evaluate_model(model, test_images)

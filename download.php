@@ -36,10 +36,10 @@ if (isset($_POST)){
         echo json_encode(['success' => false, 'message' => 'Error saving the image.']);
     }
 
-    # make a prediction for the image
-    $command = escapeshellcmd("python C:/Users/14379/Desktop/Coding/deerhacks-2024/predictor.py $savePath");
-    exec($command, $output);
-    print_r($output);
+    // # make a prediction for the image
+    // $command = escapeshellcmd("python C:/Users/14379/Desktop/Coding/deerhacks-2024/predictor.py $savePath");
+    // exec($command, $output);
+    // print_r($output);
 
     
 }
