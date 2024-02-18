@@ -81,7 +81,7 @@
         function startCapture() {
             captureInterval = setInterval(() => {
                 capturePicture();
-            }, 10000);
+            }, 3000);
         }
 
         function stopCapture() {
@@ -89,6 +89,7 @@
         }
 
         function capturePicture() {
+            console.log("test");
             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
             // You can now use the data from the canvas (e.g., send it to a server, display it on the page, etc.)
             const imageData = canvas.toDataURL('image/jpeg');
