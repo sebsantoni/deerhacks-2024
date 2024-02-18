@@ -10,7 +10,7 @@ filePath = './fruit_data/Training' # the path of the files to train on
 sample_size = 50 # the number of images to sample from each class
 num_epochs = 100 # the number of epochs for which to train the model
 num_classes = 60 # the number of classes/categories from which to predict
-testDir = './Apple_Photos' # directory from which user data is pulled for the model to use
+testDir = './user_data' # directory from which user data is pulled for the model to use
 
 # data frame setup
 image_dir = Path(filePath)
