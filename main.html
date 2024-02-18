@@ -59,7 +59,6 @@
                 document.getElementById('view1').style.display = 'none';
                 document.getElementById('main-content').style.display = 'flex';
                 document.getElementById('overlay').style.display = 'flex';
-                //detectFood(stream);
             } catch (err) {
                 console.error('Error accessing the camera: ', err);
             }
@@ -70,22 +69,20 @@
             document.getElementById('overlay').style.display = 'flex';
         }
 
-        // Function to hide overlay
+        // hide overlay
         function hideOverlay() {
             document.getElementById('overlay').style.display = 'none';
         }
 
         // scan food for ecoscore
         function scanForSustainability() {
-            // Add your logic for sustainability scanning here
-            hideOverlay(); // Hide the overlay after selection
+            hideOverlay();
             startCapture();
         }
 
         // add food to inventory
         function addToInventory() {
-            // Add your logic for adding to inventory here
-            hideOverlay(); // Hide the overlay after selection
+            hideOverlay();
             startCapture();
         }
         
@@ -102,7 +99,6 @@
         function capturePicture() {
             console.log("test");
             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-            // You can now use the data from the canvas (e.g., send it to a server, display it on the page, etc.)
             const imageData = canvas.toDataURL('image/jpeg');
 
             const endpoint = "http://localhost/download.php";
@@ -123,30 +119,6 @@
             })
             .catch(error => console.error('Error:', error));
         }
-
-
-        // async function detectFood(stream) {
-        //     const video = document.getElementById('video');
-        //     const foodList = document.getElementById('foodList');
-
-        //     // You need to implement the food detection logic here
-        //     // This could be image processing or using a machine learning model
-
-        //     // For example, you could use a pre-trained model like TensorFlow.js or a cloud-based API
-
-        //     // Here's a dummy example of adding a food item to the list
-        //     setTimeout(() => {
-        //         const foodItem = "Apple"; // Detected food item
-        //         const listItem = document.createElement('li');
-        //         listItem.textContent = foodItem;
-        //         foodList.appendChild(listItem);
-
-        //         // Stop video stream after adding food item
-        //         stream.getTracks().forEach(track => track.stop());
-        //         video.style.display = 'none';
-        //     }, 5000); // Simulating detection for 5 seconds
-        // }
-
     </script>
 
     <!-- to use AOS (Animate on Scroll) -->

@@ -22,7 +22,7 @@ def ecoScoreCalc(csv_file_path, search_string):
         
         wasFound = False
         
-        # Assuming the first row contains headers, you can skip it if needed
+        # assuming the first row contains headers, skip it if needed
         #headers = next(reader, None)
         
         for row_num, row in enumerate(reader, start=1):
@@ -48,7 +48,7 @@ def ecoScoreCalc(csv_file_path, search_string):
     #third part - find how eco friendly it is
         target_value = waterValue
         
-        # Extract the specified column
+        # extract the specified column
         column_values = [float(row[1]) for row in reader if float(row[1]) != 0]
         
         if (target_value == 0):
@@ -57,26 +57,26 @@ def ecoScoreCalc(csv_file_path, search_string):
         else:
             mean_value = statistics.mean(column_values)
 
-            # Calculate and print the percentage difference for the target value
+            # calculate and print the percentage difference for the target value
             waterValue = round((((waterValue - mean_value)/1.8109406130140314)+919)/300)
             if(waterValue > 5):
                 waterValue = 5
             waterValue = 5 - waterValue
             print("The water eco-score a(n)", search_string, "is", waterValue, "out of 5")
             
-        file.seek(0)  # Reset the file pointer to the beginning
+        file.seek(0)  # reset the file pointer to the beginning
         target_value = float(carbonValue)
 
         if (target_value == 0):
             print("Carbon data not available")   
             carbonValue = -1  
         else: 
-            # Extract the specified column
+            # extract the specified column
             column_values = [float(row[2]) for row in reader if float(row[2]) != 0]
     
             mean_value = statistics.mean(column_values)
             
-            ## Calculate and print the percentage difference for each value
+            ## calculate and print the percentage difference for each value
             #for index, value in enumerate(column_values, start=1):
             #    percentage_diff = calculate_carbon_score(value, mean_value, std_dev_value)
             #    if(percentage_diff > 5):
@@ -84,7 +84,7 @@ def ecoScoreCalc(csv_file_path, search_string):
             #    percentage_diff = 5 - percentage_diff
             #    print(f"Percentage Difference from Mean = {round(percentage_diff)}")
 
-            # Calculate and print the percentage difference for the target value
+            # calculate and print the percentage difference for the target value
             carbonValue = round((carbonValue - mean_value + 0.47)*14.652014652)
             if(carbonValue > 5):
                 carbonValue = 5

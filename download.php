@@ -1,6 +1,6 @@
 <?php
 
-// Set CORS headers
+// set CORS headers
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -40,13 +40,9 @@ if (isset($_POST)){
     // $command = escapeshellcmd("python C:/Users/14379/Desktop/Coding/deerhacks-2024/predictor.py $savePath");
     // exec($command, $output);
     // print_r($output);
-
-    
 }
 
 // // GET: Send prediction to server, get ecological score
 // if (isset($_GET)){
 
 // }
-
-   

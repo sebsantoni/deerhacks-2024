@@ -23,7 +23,7 @@ def ecoScoreCalc(csv_file_path, search_string):
 
         wasFound = False
 
-        # Assuming the first row contains headers, you can skip it if needed
+        # assuming the first row contains headers, skip it if needed
         # headers = next(reader, None)
 
         for row_num, row in enumerate(reader, start=1):
@@ -46,7 +46,7 @@ def ecoScoreCalc(csv_file_path, search_string):
         # third part - find how eco friendly it is
         target_value = waterValue
 
-        # Extract the specified column
+        # extract the specified column
         column_values = [float(row[1]) for row in reader if float(row[1]) != 0]
 
         if (target_value == 0):
@@ -55,21 +55,21 @@ def ecoScoreCalc(csv_file_path, search_string):
         else:
             mean_value = statistics.mean(column_values)
 
-            # Calculate and print the percentage difference for the target value
+            # calculate and print the percentage difference for the target value
             waterValue = round((((waterValue - mean_value) / 1.8109406130140314) + 919) / 300)
             if (waterValue > 5):
                 waterValue = 5
             waterValue = 5 - waterValue
             print("The water eco-score for a(n)", search_string, "is", waterValue, "out of 5")
 
-        file.seek(0)  # Reset the file pointer to the beginning
+        file.seek(0)  # reset the file pointer to the beginning
         target_value = float(carbonValue)
 
         if (target_value == 0):
             print("Carbon data not available")
             carbonValue = -1
         else:
-            # Extract the specified column
+            # extract the specified column
             column_values = [float(row[2]) for row in reader if float(row[2]) != 0]
 
             mean_value = statistics.mean(column_values)
